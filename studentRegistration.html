@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration - Campus Election & Voting System</title>
+    <style>
+        /* Basic CSS Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .container h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+            background: #f9f9f9;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            background: #fff;
+            border-color: #007bff;
+        }
+
+        .form-group label {
+            position: absolute;
+            top: -18px;
+            left: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .footer {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <?php
+        //call file to connect server eleave
+        include ("header.php");
+        ?>
+
+        <?php
+        //this query inserts a record in the eLeave table
+        //has form been submitted?
+        if ($_SERVER['REQUEST_METHOD']== 'POST')
+        {
+            $error = array (); //initialize an error array
+
+            
+
+        //check for adminName
+        if (empty ($_POST ['userName']))
+        {
+            $error [] = 'You forgot to enter your name.';
+        }
+        else 
+        {
+            $n = mysqli_real_escape_string ($connect, trim ($_POST ['userName']));
+        }
+
+        //check for adminEmail
+       if (empty ($_POST ['userEmail']))
+       {
+           $error [] = 'You forgot to enter your email.';
+       }
+      else 
+       {
+           $e = mysqli_real_escape_string ($connect, trim ($_POST ['userEmail']));
+       }
+
+        //check for adminPassword
+        if (empty ($_POST ['userPassword']))
+        {
+            $error [] = 'You forgot to the password.';
+        }
+        else 
+        {
+        $p = mysqli_real_escape_string ($connect, trim ($_POST ['userPassword']));
+        }
+
+       //check for userFullName 
+        if (empty ($_POST ['userFullName']))
+        {
+            $error [] = 'You forgot to enter your name.';
+        }
+        else 
+        {
+            $fn = mysqli_real_escape_string ($connect, trim ($_POST ['userFullName']));
+        }
+
+         
+
+        
+       //register the admin in the database
+       //make the query
+       $q = "INSERT INTO user (userID, userName, userEmail, userPassword,userFullName, infoPersonal, projectDetails, fundingNeeds,requestStatus) VALUES ('','$n','$e','$p','$fn','','','','')";
+       $result = @mysqli_query ($connect, $q); //run query
+       if ($result)//f it runs
+       {
+        echo '<script>alert("Thankyou for register with us!"); window.location.href="userLogin.php";</script>';
+        exit();
+       }
+       else 
+       { //if it didnt run
+        //message
+        echo '<h1>System Error</h1>';
+
+        //debugging message
+        echo '<p>' .mysqli_error($connect). '<br><br> Query: '.$q.'</p>';
+       } //end of (result)
+       mysqli_close($connect); //close databse connection_aborted
+       exit();
+        } //end of the main submit conditional
+        ?>
+
+    <div class="container">
+        <h2>Student Registration</h2>
+        <form action="studentRegister.php" method="POST" class="registration-form">
+
+            <div class="form-group">
+                <input type="email" id="studentEmail" name="studentEmail" size="30" 
+                       maxlength="50" required 
+                       value="<?php if (isset($_POST['studentEmail'])) echo $_POST['studentEmail']; ?>">
+                <label for="studentEmail">Student Email</label>
+            </div>
+
+            <div class="form-group">
+                <input type="password" id="studentPassword" name="studentPassword" size="15" maxlength="60" 
+                       pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" 
+                       title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" 
+                       required 
+                       value="<?php if (isset($_POST['studentPassword'])) echo $_POST['studentPassword']; ?>">
+                <label for="studentPassword">Password</label>
+            </div>
+
+            <button type="submit">Register</button>
+        </form>
+        <div class="footer">
+            <p>Already registered? <a href="studentLogin.php">Sign In</a></p>
+        </div>
+    </div>
+
+</body>
+</html>

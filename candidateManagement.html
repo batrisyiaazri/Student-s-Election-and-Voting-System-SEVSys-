@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Candidate Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Header Styling */
+        .header {
+            width: 100%;
+            background-color: #16519E;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            position: fixed;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .header a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 250px;
+            background-color: #f4f7f6;
+            color: #2C3E50;
+            padding-top: 20px;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 60px; /* Below header */
+            transition: all 0.3s ease;
+        }
+
+        .sidebar.closed {
+            width: 70px;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+        }
+
+        .sidebar-header h2 {
+            font-size: 18px;
+            color: #2C3E50;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .nav-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .nav-list li {
+            padding: 15px;
+        }
+
+        .nav-list a {
+            color: #2C3E50;
+            text-decoration: none;
+            font-size: 16px;
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .nav-list a.active, .nav-list a:hover {
+            background-color: #16519E;
+            padding-left: 20px;
+            transition: 0.3s;
+            color: white;
+        }
+
+        /* Toggle Button */
+        .toggle-btn {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f4f7f6;
+            color: #2C3E50;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        /* Main Content Styling */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+            min-height: 100vh;
+            padding-top: 80px; /* To account for the header */
+        }
+
+        .main-content.closed {
+            margin-left: 70px;
+            width: calc(100% - 70px);
+        }
+
+        /* Breadcrumbs Styling */
+        .breadcrumbs {
+            margin: 20px 0;
+            font-size: 14px;
+        }
+
+        .breadcrumbs a {
+            text-decoration: none;
+            color: #3498db;
+            margin-right: 10px;
+        }
+
+        .breadcrumbs span {
+            margin-right: 10px;
+            color: #7f8c8d;
+        }
+
+        header {
+            background-color: #16519E;
+            color: white;
+            padding: 20px;
+            text-align: left;
+            border-radius: 8px;
+        }
+
+        header h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        header p {
+            font-size: 14px;
+            color: #ecf0f1;
+        }
+
+        .table-container {
+            margin-top: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #16519E;
+            color: white;
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        /* Button Styling */
+        .btn {
+            padding: 10px 20px;
+            font-size: 14px;
+            color: white;
+            background-color: #3498db;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-edit {
+            background-color: #f39c12;
+        }
+
+        .btn-edit:hover {
+            background-color: #e67e22;
+        }
+
+        .btn-delete {
+            background-color: #e74c3c;
+        }
+
+        .btn-delete:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-add {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            background-color: #2ecc71;
+        }
+
+        .btn-add:hover {
+            background-color: #27ae60;
+        }
+
+        /* Footer Styling */
+        .footer {
+            background-color: #34495e;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        .footer p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>Admin Dashboard - Candidate Management</h1>
+        <a href="#logout">Sign Out</a>
+    </div>
+
+     <!-- Sidebar -->
+     <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>Admin Panel</h2>
+            <div class="toggle-btn" onclick="toggleSidebar()">&#9776;</div>
+        </div>
+        <ul class="nav-list">
+            <li><a href="adminHomepage.html" class="active">Dashboard</a></li>
+            <li><a href="#candidates">Candidates</a></li>
+            <li><a href="studManagement.html">Students</a></li>
+            <li><a href="#election">Election</a></li>
+            <li><a href="#settings">Settings</a></li>
+            <li><a href="#logout">Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+
+        <header>
+            <h1>Candidate Management</h1>
+            <p>Manage all candidate profiles. You can add, edit, or remove candidates.</p>
+        </header>
+
+        <!-- Breadcrumbs -->
+        <div class="breadcrumbs">
+            <a href="adminHomepage.html">Dashboard</a>
+            <span>&gt;</span>
+            <span>Manage Candidates</span>
+        </div>
+
+        <!-- Add Candidate Button -->
+        <button class="btn btn-add" onclick="alert('Add Candidate functionality')">Add Candidate</button>
+
+        <!-- Candidate Table -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Candidate Name</th>
+                        <th>Position</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>John Doe</td>
+                        <td>President</td>
+                        <td>
+                            <button class="btn btn-edit" onclick="alert('Edit Candidate functionality')">Edit</button>
+                            <button class="btn btn-delete" onclick="alert('Delete Candidate functionality')">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Jane Smith</td>
+                        <td>Vice President</td>
+                        <td>
+                            <button class="btn btn-edit" onclick="alert('Edit Candidate functionality')">Edit</button>
+                            <button class="btn btn-delete" onclick="alert('Delete Candidate functionality')">Delete</button>
+                        </td>
+                    </tr>
+                    <!-- More candidates can be added here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+    <!-- JavaScript for sidebar toggle -->
+    <script>
+        function toggleSidebar() {
+            var sidebar = document.getElementById("sidebar");
+            var mainContent = document.getElementById("main-content");
+
+            sidebar.classList.toggle("closed");
+            mainContent.classList.toggle("closed");
+        }
+    </script>
+
+</body>
+</html>

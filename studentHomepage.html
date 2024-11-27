@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Homepage</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header Styling */
+        .header {
+            width: 100%;
+            background-color: #16519E;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            position: fixed;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .header a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 250px;
+            background-color: #f4f7f6;
+            color: #34495e; 
+            padding-top: 20px;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 60px; /* Below header */
+            transition: all 0.3s ease;
+        }
+
+        .sidebar.closed {
+            width: 70px;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+        }
+
+        .sidebar-header h2 {
+            font-size: 18px;
+            color: #34495e;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .nav-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .nav-list li {
+            padding: 15px;
+        }
+
+        .nav-list a {
+            color: #34495e;
+            text-decoration: none;
+            font-size: 16px;
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .nav-list a.active, .nav-list a:hover {
+            background-color: #f4f7f6;
+            padding-left: 20px;
+            transition: 0.3s;
+            color: #34495e;
+        }
+
+        /* Toggle Button */
+        .toggle-btn {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f4f7f6;
+            color: #34495e;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        /* Main Content Styling */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+            min-height: 100vh;
+            padding-top: 80px; /* To account for the header */
+        }
+
+        .main-content.closed {
+            margin-left: 70px;
+            width: calc(100% - 70px);
+        }
+
+        header {
+            background-color: #16519E;
+            color: white;
+            padding: 20px;
+            text-align: left;
+            border-radius: 8px;
+        }
+
+        header h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        header p {
+            font-size: 14px;
+            color: #ecf0f1;
+        }
+
+        .candidate-list {
+            margin-top: 20px;
+        }
+
+        .candidate {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .candidate h3 {
+            font-size: 18px;
+            color: #34495e;
+        }
+
+        .candidate p {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+
+        /* Footer Styling */
+        .footer {
+            background-color: #34495e;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        .footer p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>Student Dashboard</h1>
+        <a href="#logout">Sign Out</a>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>Student Panel</h2>
+            <div class="toggle-btn" onclick="toggleSidebar()">&#9776;</div>
+        </div>
+        <ul class="nav-list">
+            <li><a href="#candidates" class="active">Candidate Profiles</a></li>
+            <li><a href="applycandidate.php">Apply as Candidate</a></li>
+            <li><a href="#voting">Voting</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <header>
+            <h1>Candidate Profiles</h1>
+            <p>View the details of all registered candidates for the upcoming election.</p>
+        </header>
+
+        <div class="candidate-list">
+            <div class="candidate">
+                <h3>Candidate 1</h3>
+                <p>Position: President</p>
+                <p>Campaign Message: "Bringing unity to the student body and promoting transparency."</p>
+            </div>
+            <div class="candidate">
+                <h3>Candidate 2</h3>
+                <p>Position: Vice President</p>
+                <p>Campaign Message: "Focused on improving student life through better services and activities."</p>
+            </div>
+            <!-- More candidates can be added here -->
+        </div>
+    </div>
+
+    
+
+    <!-- JavaScript for sidebar toggle -->
+    <script>
+        function toggleSidebar() {
+            var sidebar = document.getElementById("sidebar");
+            var mainContent = document.getElementById("main-content");
+
+            sidebar.classList.toggle("closed");
+            mainContent.classList.toggle("closed");
+        }
+    </script>
+</body>
+</html>
